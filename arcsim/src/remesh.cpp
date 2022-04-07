@@ -121,7 +121,7 @@ RemeshOp compose (const RemeshOp &op1, const RemeshOp &op2) {
 // Fake physics for midpoint evaluation
 
 Tensor derivative_matrix (const Tensor &u0, const Tensor &u1, const Tensor &u2) {
-    Tensor Dm = stack({u1-u0, u2-u0},1);
+    Tensor Dm = torch::stack({u1-u0, u2-u0},1);
     Tensor invDm = Dm.inverse();
     return matmul(invDm.t(),torch::tensor({-1,1,0,-1,0,1},TNOPT).reshape({2,3}));
 }
@@ -152,7 +152,7 @@ Quadratic<3> stretching (const Vert *vert0, const Vert *vert1,
     const Tensor &x0 = pos<s>(vert0->node), &x1 = pos<s>(vert1->node),
                &x2 = pos<s>(vert2->node);
     Tensor D = derivative_matrix(u0, u1, u2);
-    Tensor F = matmul(stack({x0,x1,x2},1), D.t()); // = (D * Mat3x3(x0,x1,x2).t()).t()
+    Tensor F = matmul(torch::stack({x0,x1,x2},1), D.t()); // = (D * Mat3x3(x0,x1,x2).t()).t()
     Tensor G = (matmul(F.t(),F) - torch::eye(2,TNOPT))/2.;
     // eps = 1/2(F'F - I) = 1/2([x_u^2 & x_u x_v \\ x_u x_v & x_v^2] - I)
     // e = 1/2 k0 eps00^2 + k1 eps00 eps11 + 1/2 k2 eps11^2 + 1/2 k3 eps01^2

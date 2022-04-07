@@ -101,7 +101,7 @@ void color (const Tensor &x0) {
 
 Tensor origami_color (const Face *face) {
     Tensor H = trace(face->S_plastic)/1000;
-    return 0.9*stack({1 + H, 1 - abs(H)/2, 1 - H});
+    return 0.9*torch::stack({1 + H, 1 - abs(H)/2, 1 - H});
 }
 
 void draw_mesh_ms (const Mesh &mesh, bool set_color=false) {

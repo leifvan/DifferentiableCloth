@@ -63,7 +63,7 @@ ostream &operator<< (ostream &out, const Edge *edge) {
 
 ostream &operator<< (ostream &out, const Face *face) {
     out << "f:" << name(face) << "(" << face->v[0] << "-" << face->v[1] << "-" << face->v[2] << ")"; return out;}
-Tensor sgn(Tensor x){return (x>=0)*ONE-(x<0)*ONE;}
+Tensor _sgn(Tensor x){return (x>=0)*ONE-(x<0)*ONE;}
 int solve_quadratic (Tensor a, Tensor b, Tensor c, Tensor x[2]) {
     // http://en.wikipedia.org/wiki/Quadratic_formula#Floating_point_implementation
     Tensor d = b*b - 4*a*c;
@@ -71,7 +71,7 @@ int solve_quadratic (Tensor a, Tensor b, Tensor c, Tensor x[2]) {
         x[0] = -b/(2*a);
         return 0;
     }
-    Tensor q = -(b + sgn(b).to(kF64)*sqrt(d))/2;
+    Tensor q = -(b + _sgn(b).to(kF64)*sqrt(d))/2;
     int i = 0;
     if ((abs(a) > 1e-12*abs(q)).item<int>())
         x[i++] = q/a;

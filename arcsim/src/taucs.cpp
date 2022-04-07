@@ -152,7 +152,7 @@ vector<Tensor> taucs_linear_solve_backward (Tensor dldz, vector<pair<int, int> >
         int row = p.first, col = p.second;
         ret.push_back(ger(dxtmp[row], ans[col]));
     }
-    Tensor dlda = -stack(ret);
+    Tensor dlda = -torch::stack(ret);
     return {dlda, dx};
 }
 
@@ -172,7 +172,7 @@ Tensor taucs_linear_solve (const SpMat &A, const Tensor &b) {
   //   cout << indices[i].first << " " << indices[i].second << endl;
   // }
   py::object func = py::module::import("taucs_py").attr("taucs_linear_solve");
-  Tensor ans = func(stack(atmp), b, indices).cast<Tensor>();
+  Tensor ans = func(torch::stack(atmp), b, indices).cast<Tensor>();
   // Tensor ans = taucs_linear_solve_forward(stack(atmp), b, indices);
   return ans;
 }

@@ -70,7 +70,7 @@ Tensor stretching_stiffness (const Tensor &G, const StretchingSamples &samples) 
     Tensor a=(G[0]+0.25);
     Tensor b=(G[3]+0.25);
     Tensor c=abs(G[1]);
-    Tensor grid = stack({c,b,a}).reshape({1,1,1,1,3})*(nsamples*2/(nsamples-1.))-1;
+    Tensor grid = torch::stack({c,b,a}).reshape({1,1,1,1,3})*(nsamples*2/(nsamples-1.))-1;
     Tensor stiffness = torch::grid_sampler(samples, grid, 0, 1, true).squeeze();
     return stiffness;
 }
@@ -79,7 +79,7 @@ Tensor batch_stretching_stiffness (const Tensor &G, const Tensor &samples) {
     Tensor a=(G[0]+0.25);
     Tensor b=(G[3]+0.25);
     Tensor c=abs(G[1]);
-    Tensor grid = stack({c,b,a}, 1).reshape({1,1,1,-1,3})*(nsamples*2/(nsamples-1.))-1;
+    Tensor grid = torch::stack({c,b,a}, 1).reshape({1,1,1,-1,3})*(nsamples*2/(nsamples-1.))-1;
     Tensor stiffness = torch::grid_sampler(samples.squeeze(0), grid, 0, 1, true).squeeze();//.t();//4xn
     return stiffness;
 }
@@ -89,13 +89,13 @@ Tensor bending_stiffness (const Edge *edge, const BendingData &data0, const Bend
     Tensor value = clamp(curv-1, -1, 1); // because samples are per 0.05 cm^-1 = 5 m^-1
     //0
     Tensor    bias_angle0=edge->bias_angle[0];//(atan2(du0[1], du0[0]))*(4/M_PI);
-    Tensor grid0 = stack({value, bias_angle0}).reshape({1,1,1,2});
+    Tensor grid0 = torch::stack({value, bias_angle0}).reshape({1,1,1,2});
     Tensor actual_ke0 = relu(grid_sampler(data0, grid0, 0, 2, true).squeeze());
     //1
     Tensor    bias_angle1=edge->bias_angle[1];//(atan2(du1[1], du1[0]))*(4/M_PI);
     if ((data0==data1).all().item<int>() && (bias_angle0==bias_angle1).all().item<int>())
       return actual_ke0;
-    Tensor grid1 = stack({value, bias_angle1}).reshape({1,1,1,2});
+    Tensor grid1 = torch::stack({value, bias_angle1}).reshape({1,1,1,2});
     Tensor actual_ke1 = relu(grid_sampler(data1, grid1, 0, 2, true).squeeze());
     return min(actual_ke0, actual_ke1);
 }
@@ -105,13 +105,13 @@ Tensor batch_bending_stiffness(Tensor curv, Tensor bang, Tensor bend) {
     bend = bend.squeeze(0);
     //0
     Tensor    bias_angle0=bang[0];//(atan2(du0[1], du0[0]))*(4/M_PI);
-    Tensor grid0 = stack({value, bias_angle0}, 1).reshape({1,1,-1,2});
+    Tensor grid0 = torch::stack({value, bias_angle0}, 1).reshape({1,1,-1,2});
     Tensor actual_ke0 = relu(grid_sampler(bend, grid0, 0, 2, true).squeeze());
     //1
     Tensor    bias_angle1=bang[1];//(atan2(du1[1], du1[0]))*(4/M_PI);
     if ((bias_angle0==bias_angle1).all().item<int>())
       return actual_ke0;
-    Tensor grid1 = stack({value, bias_angle1}, 1).reshape({1,1,-1,2});
+    Tensor grid1 = torch::stack({value, bias_angle1}, 1).reshape({1,1,-1,2});
     Tensor actual_ke1 = relu(grid_sampler(bend, grid1, 0, 2, true).squeeze());
     return min(actual_ke0, actual_ke1);
 }

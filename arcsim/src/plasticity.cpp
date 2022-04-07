@@ -51,7 +51,7 @@ void reset_plasticity (Cloth &cloth) {
     }
     for (int f = 0; f < mesh.faces.size(); f++) {
         Face *face = mesh.faces[f];
-        Tensor theta = stack({face->adje[0]->theta,
+        Tensor theta = torch::stack({face->adje[0]->theta,
                           face->adje[1]->theta,
                           face->adje[2]->theta});
         face->S_plastic = edges_to_face(theta, face);
@@ -69,7 +69,7 @@ void plastic_update (Cloth &cloth) {
     for (int f = 0; f < mesh.faces.size(); f++) {
         Face *face = mesh.faces[f];
         Tensor S_yield = materials[face->label]->yield_curv;
-        Tensor theta = stack({face->adje[0]->theta,
+        Tensor theta = torch::stack({face->adje[0]->theta,
                           face->adje[1]->theta,
                           face->adje[2]->theta});
         Tensor S_total = edges_to_face(theta, face);
@@ -190,7 +190,7 @@ Tensor edges_to_face (const Tensor &theta, const Face *face) {
 }
 
 Tensor face_to_edges (const Tensor &S, const Face *face) {
-    Tensor s = face->a*stack({S[0][0], S[1][1], S[0][1]});
+    Tensor s = face->a*torch::stack({S[0][0], S[1][1], S[0][1]});
     Tensor A = torch::zeros({3,3},TNOPT);
     for (int e = 0; e < 3; e++) {
         const Edge *edge = face->adje[e];

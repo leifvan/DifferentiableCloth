@@ -46,7 +46,7 @@ Tensor tensor_max (const vector<Tensor> &Ms) {
         const Tensor &M = Ms[i];
         if ((trace(M) == 0).item<int>())
             continue;
-        disks.push_back(Disk(stack({(M[0][0]-M[1][1])/2, (M[0][1]+M[1][0])/2}),
+        disks.push_back(Disk(torch::stack({(M[0][0]-M[1][1])/2, (M[0][1]+M[1][0])/2}),
                              (M[0][0]+M[1][1])/2));
     }
     Disk disk = welzls_algorithm(disks);
@@ -141,7 +141,7 @@ Disk apollonius (const Disk &disk1, const Disk &disk2, const Disk &disk3) {
     Tensor rs = (-b-sqrt(D))/(2*a);
     Tensor xs = M+N*rs;
     Tensor ys = P+Q*rs;
-    return Disk(stack({xs,ys}), rs);
+    return Disk(torch::stack({xs,ys}), rs);
 }
 
 bool enclosed (const Disk &disk0, const Disk &disk1) {

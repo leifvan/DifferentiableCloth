@@ -238,7 +238,7 @@ Tensor get_barycentric_coords(const Tensor& point, const Face* f) {
     Tensor invDenom = 1. / (dot00 * dot11 - dot01 * dot01);
     Tensor u = (dot11 * dot02 - dot01 * dot12) * invDenom;
     Tensor v = (dot00 * dot12 - dot01 * dot02) * invDenom;
-    return stack({u,v,1-u-v});
+    return torch::stack({u,v,1-u-v});
 }
 
 // Is the point within the face?

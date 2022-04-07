@@ -801,15 +801,15 @@ extern int genmmd_(int*, int*, int*, int*, int*, int*, int*, int*, int*,
 /* in math.h (e.g., gcc -std=c89 -pedantic); these are for     */
 /* gcc 3.3.1                                                   */
 
-#ifndef isnan
+/*#ifndef isnan
 extern int isnan(double);
-#endif
+#endif*/
 #ifndef finite
 extern int finite(double);
 #endif
-#ifndef isinf
+/*#ifndef isinf
 extern int isinf(double);
-#endif
+#endif*/
 
 extern int taucs_potrf(char*, int*, taucs_datatype*, int*, int*);
 extern int taucs_trsm(char *, char *, char *, char *, 

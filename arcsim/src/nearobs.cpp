@@ -87,7 +87,7 @@ void update_nearest_point (const Tensor &x, BVHNode *node, NearPoint &p) {
 }
 
 Tensor point_box_distance (const Tensor &x, const BOX &box) {
-    Tensor xp = stack({clamp(x[0], box._dist[0], box._dist[9]),
+    Tensor xp = torch::stack({clamp(x[0], box._dist[0], box._dist[9]),
                    clamp(x[1], box._dist[1], box._dist[10]),
                    clamp(x[2], box._dist[2], box._dist[11])});
     return norm(x - xp);

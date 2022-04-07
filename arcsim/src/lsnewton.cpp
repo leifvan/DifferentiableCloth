@@ -113,8 +113,8 @@ Tensor line_search (const Tensor &x0, const Tensor &p,
             a_next = -g0*sq(a)/(2*(f - f0 - g0*a)); // minimize quadratic fit
         else {
             // minimize cubic fit to f0, g0, f_prev, f
-            Tensor b = matmul(stack({sq(a_prev), -sq(a),-cb(a_prev),cb(a)}).reshape({2,2})
-                     , stack({f-f0-g0*a, f_prev-f0-g0*a_prev}))
+            Tensor b = matmul(torch::stack({sq(a_prev), -sq(a),-cb(a_prev),cb(a)}).reshape({2,2})
+                     , torch::stack({f-f0-g0*a, f_prev-f0-g0*a_prev}))
                      / (sq(a)*sq(a_prev)*(a-a_prev));
             Tensor a_sol[2];
             solve_quadratic(3*b[0], 2*b[1], g0, a_sol);

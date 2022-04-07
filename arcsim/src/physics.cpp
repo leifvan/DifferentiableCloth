@@ -162,8 +162,8 @@ pair<Tensor,Tensor> bending_force (const Edge *edge) {
     Tensor t0 = dot(e, x2-x0)/dote, t1 = dot(e, x3-x0)/dote;
     Tensor h0 = max(norm(x2-x0-e*t0),norme), h1 = max(norm(x3-x0-e*t1),norme);
     Tensor n0 = nor<s>(face0)/h0, n1 = nor<s>(face1)/h1;
-    Tensor w_f = stack({t0-1,t1-1,-t0,-t1,ONE,ZERO,ZERO,ONE}).reshape({4,2});
-    Tensor dtheta = matmul(w_f, stack({n0,n1})).flatten();
+    Tensor w_f = torch::stack({t0-1,t1-1,-t0,-t1,ONE,ZERO,ZERO,ONE}).reshape({4,2});
+    Tensor dtheta = matmul(w_f, torch::stack({n0,n1})).flatten();
 
     // Tensor h01 = distance(x2, x0, x1), h11 = distance(x3, x0, x1);
     // Tensor n01 = nor<s>(face0)/h01, n11 = nor<s>(face1)/h11;
@@ -192,8 +192,8 @@ pair<Tensor,Tensor> batch_bending_force (Tensor bat_x, Tensor bat_weak, Tensor b
     Tensor t0 = sum(e*(x2mx0), 1)/dote, t1 = sum(e*(x3mx0), 1)/dote;
     Tensor h0 = max(norm(x2mx0-e*t0.unsqueeze(1),2,{1}),norme), h1 = max(norm(x3mx0-e*t1.unsqueeze(1),2,{1}),norme);
     Tensor n0 = bat_n[0]/h0.unsqueeze(1), n1 = bat_n[1]/h1.unsqueeze(1);
-    Tensor w_f = stack({t0-1,t1-1,-t0,-t1}).t().reshape({-1,2,2});
-    Tensor dtheta = bmm(w_f, stack({n0,n1}, 1)).squeeze();//nx2x3
+    Tensor w_f = torch::stack({t0-1,t1-1,-t0,-t1}).t().reshape({-1,2,2});
+    Tensor dtheta = bmm(w_f, torch::stack({n0,n1}, 1)).squeeze();//nx2x3
     dtheta = cat({dtheta,n0.unsqueeze(1),n1.unsqueeze(1)}, 1).reshape({-1,12});//nx12
 
     Tensor ke = batch_bending_stiffness(bat_oritheta*bat_ldaa*0.05, bat_bang, bat_bend);
@@ -293,7 +293,7 @@ void add_internal_forces (const Cloth &cloth, SpMat &A,
         batch_dv.push_back(Dv);
         batch_a.push_back(face->a);
     }
-    pair<Tensor,Tensor> membF = batch_stretching_force(stack(batch_F), stack(batch_stret), stack(batch_weak), stack(batch_du), stack(batch_dv), stack(batch_a));
+    pair<Tensor,Tensor> membF = batch_stretching_force(torch::stack(batch_F), torch::stack(batch_stret), torch::stack(batch_weak), torch::stack(batch_du), torch::stack(batch_dv), torch::stack(batch_a));
 //Tensor G = (bmm(stack(batch_F).permute({0,2,1}),stack(batch_F)) - 0.0*torch::eye(2,TNOPT).unsqueeze(0)).reshape({-1,4})*0.5;
 //Tensor k = batch_stretching_stiffness(G.t(), stack(batch_stret));
 //mesh.nodes[0]->x += (*::materials)[0]->stretching.sum()*torch::ones({3},TNOPT);
@@ -351,9 +351,9 @@ void add_internal_forces (const Cloth &cloth, SpMat &A,
         bat_oritheta.push_back(edge->theta);
         edge_map[e]=bat_a.size()-1;
     }
-    pair<Tensor, Tensor> bendF = batch_bending_force(stack(bat_x).reshape({-1,4,3}).permute({1,0,2}), stack(bat_weak),
-    	 stack(bat_a), stack(bat_theta), stack(bat_n).reshape({-1,2,3}).permute({1,0,2}), stack(bat_bend),
-    	stack(bat_ldaa), stack(bat_bang).reshape({-1,2}).t(), stack(bat_theta_ideal), stack(bat_oritheta));
+    pair<Tensor, Tensor> bendF = batch_bending_force(torch::stack(bat_x).reshape({-1,4,3}).permute({1,0,2}), torch::stack(bat_weak),
+    	 torch::stack(bat_a), torch::stack(bat_theta), torch::stack(bat_n).reshape({-1,2,3}).permute({1,0,2}), torch::stack(bat_bend),
+    	torch::stack(bat_ldaa), torch::stack(bat_bang).reshape({-1,2}).t(), torch::stack(bat_theta_ideal), torch::stack(bat_oritheta));
     for (int e = 0; e < mesh.edges.size(); ++e) {
     const Edge *edge = mesh.edges[e];
         if (!edge->adjf[0] || !edge->adjf[1])

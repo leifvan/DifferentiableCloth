@@ -147,7 +147,7 @@ Tensor pos (const Tensor &A) {
     return matmul(eig.Q, matmul(diag(eig.l), eig.Q.t()));
 }
 
-Tensor perp2 (const Tensor &A) {return stack({A[1][1], -A[0][1], -A[1][0], A[0][0]}).reshape({2,2});}
+Tensor perp2 (const Tensor &A) {return torch::stack({A[1][1], -A[0][1], -A[1][0], A[0][0]}).reshape({2,2});}
 
 Tensor compression_metric (const Tensor &e, const Tensor &S2, Tensor c) {
     Tensor D = e.t()*e - 4*sq(c)*perp2(S2)*::magic.rib_stiffening;

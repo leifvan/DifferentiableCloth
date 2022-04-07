@@ -131,7 +131,7 @@ bool check_that_contents_are_sane (const Mesh &mesh) {
 // Material space data
 
 void compute_ms_data (Face* face) {
-    face->Dm = stack({face->v[1]->u - face->v[0]->u,
+    face->Dm = torch::stack({face->v[1]->u - face->v[0]->u,
                       face->v[2]->u - face->v[0]->u},1);
     face->a = det(face->Dm)/2;
     if ((face->a == ZERO).item<int>())
@@ -153,7 +153,7 @@ void compute_ms_data (Edge* edge) {
     edge->ldaa = edge->l/(edge->adjf[0]->a + edge->adjf[1]->a);
     Tensor du0 = edge_vert(edge, 0, 1)->u - edge_vert(edge, 0, 0)->u;
     Tensor du1 = edge_vert(edge, 1, 1)->u - edge_vert(edge, 1, 0)->u;
-    edge->bias_angle = stack({atan2(du0[1], du0[0]), atan2(du1[1], du1[0])})*(4/M_PI)-1;
+    edge->bias_angle = torch::stack({atan2(du0[1], du0[0]), atan2(du1[1], du1[0])})*(4/M_PI)-1;
 }
 
 void compute_ms_data (Vert* vert) {
