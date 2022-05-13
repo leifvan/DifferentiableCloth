@@ -210,7 +210,7 @@ pair<Tensor,Tensor> batch_bending_force (Tensor bat_x, Tensor bat_weak, Tensor b
     // cout << bat_bang[0][ind] << endl;
     // cout << bat_bang[1][ind] << endl;
 
-    ke *= -sq(bat_ldaa)*bat_a/4/bat_weak;
+    ke = ke * (-sq(bat_ldaa)*bat_a/4/bat_weak);
     return make_pair(ke.unsqueeze(1).unsqueeze(1)*bmm(dtheta.unsqueeze(2), dtheta.unsqueeze(1)),
                      (ke*(bat_theta - bat_theta_ideal)).unsqueeze(1)*dtheta);
 }

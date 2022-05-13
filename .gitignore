@@ -1,0 +1,5 @@
+/build/
+/arcsim/objs/*
+/arcsim/dependencies/lib/*
+/demo/*_output
+arcsim.egg-info
