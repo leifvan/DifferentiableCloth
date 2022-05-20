@@ -40,9 +40,15 @@ def get_loss():
 	ans = torch.zeros([],dtype=torch.float64)
 	cnt = 0
 	for node in sim.cloths[0].mesh.nodes:
+		if cnt % 20 == 0:
+			print(node.v)
 		cnt += 1
 		ans = ans + torch.dot(node.x,vec)
+
+	for face in sim.cloths[0].mesh.faces:
+		print(face.vertices[0].index)
 	return ans / cnt
+
 
 lr = 10
 

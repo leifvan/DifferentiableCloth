@@ -3,3 +3,15 @@
 /arcsim/dependencies/lib/*
 /demo/*_output
 arcsim.egg-info
+
+
+/pysim/__pycache__
+
+dist/arcsim-0.0.0-py3.9-linux-x86_64.egg
+
+demo/log.txt
+demo/materials
+demo/meshes
+demo/conf
+demo/curconf.json
+demo/curmat.json
