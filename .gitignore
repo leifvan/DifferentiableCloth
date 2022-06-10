@@ -15,3 +15,6 @@ demo/meshes
 demo/conf
 demo/curconf.json
 demo/curmat.json
+
+real
+synthetic

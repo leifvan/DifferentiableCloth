@@ -1,0 +1,4 @@
+lr=0.1 momentum=0.9
+forward time=128.41922426223755
+step 0: d=0.187 loss=1.1537791910332167
+backward time=2.3822896480560303

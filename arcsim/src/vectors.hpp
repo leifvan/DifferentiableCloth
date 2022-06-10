@@ -39,6 +39,8 @@ using torch::Tensor;
 #include <cmath>
 #include <iostream>
 
+// All of these tensors are just on the CPU, thus yielding slow results
+
 const torch::TensorOptions TNOPT = torch::dtype(torch::kF64);
 const Tensor EYE3=torch::eye(3,TNOPT);
 const Tensor TRU=torch::ones({}, torch::dtype(torch::kU8));
