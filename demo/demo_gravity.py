@@ -46,7 +46,7 @@ def run_sim():
 def plot_pointcloud(mesh, title=""):
     # Sample points uniformly from the surface of the mesh.
     points = sample_points_from_meshes([mesh], 5000)
-    x, y, z = points.clone().detach().cpu().squeeze().unbind(1)    
+    x, y, z = points.clone().detach().cpu().squeeze().unbind(1)     
     fig = plt.figure(figsize=(5, 5))
     ax = Axes3D(fig)
     ax.scatter3D(x, z, -y)
