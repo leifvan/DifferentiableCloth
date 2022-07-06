@@ -55,7 +55,7 @@ class PhysicsSimulator():
 		for step in tqdm(range(n_steps), desc="simulate"):
 			if correctives is not None:
 				for vert_idx in range(correctives.shape[1]):
-					self.sim.cloths[0].mesh.nodes[vert_idx].v += (correctives[self.sim.frame, vert_idx] / self.frame_steps)
+					self.sim.cloths[0].mesh.nodes[vert_idx].v = self.sim.cloths[0].mesh.nodes[vert_idx].v + (correctives[self.sim.frame, vert_idx] / self.frame_steps)
 			mesh_verts = []
 			if step % self.frame_steps == 0: 
 				for node in self.sim.cloths[0].mesh.nodes: 

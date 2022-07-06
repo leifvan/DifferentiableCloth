@@ -79,6 +79,10 @@ def train(args_expt, args_data):
 	iter_per_new_frame = 0
 	max_frame_idx = args_expt.getint('reference_frame_for_loss')
 
+	sim_meshes_verts = None
+
+	# model_params["correctives"].requires_grad = False
+
 	print("start training loop")
 
 	for cur_iter in tqdm(range(start, args_expt.getint('max_iterations')), "loop"): 
@@ -115,11 +119,6 @@ def train(args_expt, args_data):
 		if cur_iter == start + 1:
 			update_material_reuse(args_expt['log_dir'], True)
 		optimizer.zero_grad()
-
-		# for param in model_params.values():
-		# 	if param.grad is not None:
-		# 		param.grad.detach_()
-		# 		param.grad.zero_()
 
 		print("zero grad")
 		physics_sim.reset(model_params)
