@@ -1,6 +1,7 @@
 import torch
 import os
 import pdb
+from time import time
 
 from pytorch3d.ops import iterative_closest_point, corresponding_points_alignment
 from geometry.point_cloud_io import load_pointclouds_from_dir
@@ -29,6 +30,7 @@ class Align():
             aligned_meshes: meshes after aligning to ground-truth
         """
         recon_meshes = load_meshes_from_dir(recon_dir, white_verts_features=white_verts_features, re_orient_faces=self.re_orient_faces, device=self.device)
+        start_time = time()
         if self.sequence_type == 'real':
             if self.per_frame_registration:
                 recon_2_gt_icp = iterative_closest_point(recon_meshes.verts_padded(), self.gt_point_clouds)
@@ -38,5 +40,6 @@ class Align():
         elif self.sequence_type == 'synthetic':
             recon_2_gt_procrsustes = corresponding_points_alignment(recon_meshes.verts_padded(), self.gt_meshes_verts, estimate_scale=True)        
             recon_meshes_verts_aligned = recon_2_gt_procrsustes.s[:, None,None] * torch.bmm(recon_meshes.verts_padded(), recon_2_gt_procrsustes.R) + recon_2_gt_procrsustes.T[:, None, :]
-            aligned_meshes = recon_meshes.update_padded(recon_meshes_verts_aligned) 
+            aligned_meshes = recon_meshes.update_padded(recon_meshes_verts_aligned)
+        print("aligned", len(recon_meshes), f"meshes in {time() - start_time:.2f}secs")
         return aligned_meshes

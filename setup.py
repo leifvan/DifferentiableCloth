@@ -10,15 +10,15 @@ setup(
         CppExtension(
             name='arcsim',
             include_dirs=[
-                'arcsim/src',
-                'arcsim/dependencies/include',
-                'arcsim/dependencies/include/alglib'],
+                '/home/holland/DifferentiableCloth/arcsim/src',
+                '/home/holland/DifferentiableCloth/arcsim/dependencies/include',
+                '/home/holland/DifferentiableCloth/arcsim/dependencies/include/alglib'],
             sources=[
                 'pybind/bind.cpp',
             ],
             libraries=['make_pytorch','json','taucs','alglib',
             'png','z','lapack','blas','boost_system','boost_filesystem','boost_thread','gomp','glut','GLU','GL','GLdispatch'],
-            library_dirs=['objs','./arcsim/dependencies/lib','/usr/lib/x86_64-linux-gnu'],
+            library_dirs=['/home/holland/DifferentiableCloth/arcsim/objs','/home/holland/DifferentiableCloth/arcsim/dependencies/lib','/usr/lib/x86_64-linux-gnu'],
         )
     ],
     cmdclass={'build_ext': BuildExtension},

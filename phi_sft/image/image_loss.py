@@ -1,6 +1,7 @@
 import os
 import torch
 import matplotlib.pyplot as plt
+from time import time
 
 from image.image_io import read_images, save_images
 
@@ -14,8 +15,8 @@ class ImageLoss():
 			self.losses = torch.load(os.path.join(self.args_expt['log_dir'], args_expt['i_reload'], 'losses.pt'))
 		else: 
 			self.losses = {loss:[] for loss in ['rgb', 'silhouette']} 
-		self.target_rgbs = read_images(os.path.join(args_data['sequence_dir'], 'rgbs'), n_imgs = args_expt.getint('n_frames'), device=device)
-		self.target_silhouettes = read_images(os.path.join(args_data['sequence_dir'], 'blurred_masks'), n_imgs = args_expt.getint('n_frames'), device=device)
+		self.target_rgbs = read_images(os.path.join(args_data['sequence_dir'], 'rgbs'), n_imgs=args_expt.getint('n_frames'), device=device)
+		self.target_silhouettes = read_images(os.path.join(args_data['sequence_dir'], 'blurred_masks'), n_imgs=args_expt.getint('n_frames'), device=device)
 		
 	def vis_loss(self, save_dir, recon_meshes_verts):
 		"""
@@ -43,6 +44,7 @@ class ImageLoss():
 		"""
 		predicted_image = self.diff_renderer.render_rgba_optim(recon_meshes_verts)
 		# Normalize the RGB values to remove intensity and retain only color
+		start_time = time()
 		if(self.args_expt['loss'] == 'L2'):
 			loss_rgb = ((predicted_image[..., :3] - self.target_rgbs[:predicted_image.shape[0]]) ** 2).mean()
 			loss_silhouette = ((predicted_image[...,3] - self.target_silhouettes[:predicted_image.shape[0]]) ** 2).mean() 
@@ -54,6 +56,7 @@ class ImageLoss():
 
 		self.losses['rgb'].append(self.args_expt.getfloat('w_rgb') * loss_rgb.detach())
 		self.losses['silhouette'].append(self.args_expt.getfloat('w_sil') * loss_silhouette.detach())
+		print(f"loss computation took {time() - start_time:.2f}secs")
 		return loss, loss_last_frame
 
 	def plot_loss(self, save_dir):

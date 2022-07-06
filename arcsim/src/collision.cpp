@@ -492,7 +492,7 @@ if (cols>slx.nvar)cols=slx.nvar;
 
 vector<Tensor> apply_inelastic_projection_forward(Tensor xold, Tensor ws, Tensor ns, ImpactZone *zone) {
     auto slx = NormalOpt(zone);
-    cout << "orisize=" << slx.nvar + slx.ncon<<endl;
+    // cout << "orisize=" << slx.nvar + slx.ncon<<endl;
     double x[slx.nvar],oricon[slx.ncon];
     int sign;
     slx.initialize(x);
@@ -583,8 +583,8 @@ vector<Tensor> compute_derivative(real_1d_array &ans, ImpactZone *zone,
     // dlam = R^-1 * qtx
     ae_int_t info;
     alglib::densesolverreport rep;
-    cout << "orisize=" << nvar<<" "<<ncon<<" "<<nvar+ncon;
-    cout << "  size=" << q.cols() << endl;
+    // cout << "orisize=" << nvar<<" "<<ncon<<" "<<nvar+ncon;
+    // cout << "  size=" << q.cols() << endl;
     rmatrixsolve(r, (ae_int_t)q.cols(), qtx, info, rep, dlam0);
 // cout<<endl;
     for (int j = 0; j < ncon; ++j)

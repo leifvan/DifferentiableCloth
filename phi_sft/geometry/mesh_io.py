@@ -3,6 +3,7 @@ import natsort
 import torch
 import numpy as np
 import pdb
+from tqdm import tqdm
 
 from pytorch3d.io import load_obj, save_obj
 from pytorch3d.structures import Meshes, join_meshes_as_batch
@@ -22,7 +23,7 @@ def load_meshes_from_dir(obj_dir, tex_image=None, white_verts_features=False, de
     """
     mesh_list = []
     obj_files = [os.path.join(obj_dir, f) for f in  natsort.natsorted(os.listdir(obj_dir)) if f.endswith('obj')][:n_frames]
-    for i, f_obj in enumerate(obj_files):
+    for i, f_obj in enumerate(tqdm(obj_files, desc="load meshes")):
         verts, faces, aux = load_obj(f_obj, device=device)
         if tex_image is not None:
             tex = TexturesUV(verts_uvs=[aux.verts_uvs], faces_uvs=[faces.textures_idx], maps=tex_image)
@@ -76,5 +77,5 @@ def save_meshes_to_dir(obj_dir, template_obj_file, meshes_verts, device=None):
     """
     os.makedirs(obj_dir, exist_ok=True)
     _, faces, _ = load_obj(template_obj_file, device=device)
-    for mesh_idx, mesh in enumerate(meshes_verts):
+    for mesh_idx, mesh in enumerate(tqdm(meshes_verts, desc="save meshes")):
         save_obj(os.path.join(obj_dir, '%04d_00.obj'%(mesh_idx)), mesh, faces.verts_idx)

@@ -551,7 +551,7 @@ bool can_collapse (const Edge *edge, int i) {
             continue;
         for (int f = 0; f < vert0->adjf.size(); f++) {
             const Face *face = vert0->adjf[f];
-            if (is_in(vert1, face->v))
+            if (is_in(vert1, face->v.data()))
                 continue;
             const Vert *vs[3] = {face->v[0], face->v[1], face->v[2]};
             replace(vert0, vert1, vs);

@@ -14,7 +14,7 @@ PYTORCH_LIBRARIES := $(shell python -c 'from torch.utils.cpp_extension import li
 # CUDA ROOT DIR that contains bin/ lib64/ and include/
 # CUDA_DIR := /usr/local/cuda
 
-ARCSIM_DIR = arcsim
+ARCSIM_DIR = /home/holland/DifferentiableCloth/arcsim
 
 INCLUDE_DIRS += $(PYTHON_HEADER_DIR)
 INCLUDE_DIRS += $(PYTORCH_INCLUDES)
@@ -22,8 +22,8 @@ INCLUDE_DIRS += $(ARCSIM_DIR)/dependencies/include
 INCLUDE_DIRS += $(ARCSIM_DIR)/src
 
 ###############################################################################
-SRC_DIR := ./$(ARCSIM_DIR)/src
-OBJ_DIR := ./$(ARCSIM_DIR)/objs
+SRC_DIR := $(ARCSIM_DIR)/src
+OBJ_DIR := $(ARCSIM_DIR)/objs
 CPP_SRCS := $(wildcard $(SRC_DIR)/*.cpp)
 OBJS := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(CPP_SRCS))
 STATIC_LIB := $(OBJ_DIR)/libmake_pytorch.a

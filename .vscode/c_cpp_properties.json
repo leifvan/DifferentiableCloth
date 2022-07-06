@@ -4,8 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/home/ruben/Documents/Computer_Graphics_Lab/DifferentiableCloth/arcsim",
-                "/home/ruben/anaconda3/envs/cloth-clone"
+                "${workspaceFolder}/arcsim"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

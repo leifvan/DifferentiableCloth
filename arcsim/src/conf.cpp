@@ -566,7 +566,7 @@ void load_material_data (Cloth::Material &material, const string &filename, bool
     parse_stretching(material.stretching, json["stretching"], material);
     parse_bending(material.bendingori, json["bending"]);
     } else {
-    cout << "reuse!!" << endl;
+    // cout << "reuse!!" << endl;
     }
     material.density = material.densityori*1;
     material.bending = 1e-4*material.bendingori.unsqueeze(0).unsqueeze(1);

@@ -334,7 +334,7 @@ RemeshOp collapse_edge (Edge* edge, int i) {
         for (int f = 0; f < vert0->adjf.size(); f++) {
             Face *face = vert0->adjf[f];
             op.removed_faces.push_back(face);
-            if (!is_in(vert1, face->v)) {
+            if (!is_in(vert1, face->v.data())) {
                 Vert *verts[3] = {face->v[0], face->v[1], face->v[2]};
                 replace(vert0, vert1, verts);
                 op.added_faces.push_back(new Face(verts[0], verts[1], verts[2],

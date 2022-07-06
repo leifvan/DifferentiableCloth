@@ -3,8 +3,10 @@ import os
 import sys
 import torch
 import pdb
+from tqdm import tqdm
+from time import time
 from utils.json_io import read_json
-sys.path.append('../pysim')
+sys.path.append('/home/holland/DifferentiableCloth/pysim')
 
 class PhysicsSimulator():
 
@@ -50,7 +52,7 @@ class PhysicsSimulator():
 		"""
 		n_steps = n_frames * self.frame_steps - 1
 		meshes_verts = [] 
-		for step in range(n_steps):
+		for step in tqdm(range(n_steps), desc="simulate"):
 			if correctives is not None:
 				for vert_idx in range(correctives.shape[1]):
 					self.sim.cloths[0].mesh.nodes[vert_idx].v += (correctives[self.sim.frame, vert_idx] / self.frame_steps)
@@ -61,5 +63,5 @@ class PhysicsSimulator():
 				mesh_verts = torch.stack(mesh_verts, dim=0).to(self.device)
 				meshes_verts.append(mesh_verts)
 			arcsim.sim_step()
-		meshes_verts = torch.stack(meshes_verts, dim=0)	
+		meshes_verts = torch.stack(meshes_verts, dim=0)
 		return meshes_verts

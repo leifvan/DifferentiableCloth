@@ -99,7 +99,7 @@ bool check_that_pointers_are_sane (const Mesh &mesh) {
         const Face *face = mesh.faces[f];
         for (int i = 0; i < 3; i++)
             check(face, face->v[i], mesh.verts);
-        not_any_null(face, face->v, 3);
+        not_any_null(face, face->v.data(), 3);
         for (int i = 0; i < 3; i++)
             check(face, face->adje[i], mesh.edges);
         not_any_null(face, face->adje, 3);
@@ -212,7 +212,7 @@ void compute_ws_data (Node* node) {
         const vector<Face*> &adjfs = vert->adjf;
         for (int i = 0; i < adjfs.size(); i++) {
             Face const* face = adjfs[i];
-            int j = find(vert, face->v), j1 = (j+1)%3, j2 = (j+2)%3;
+            int j = find(vert, face->v.data()), j1 = (j+1)%3, j2 = (j+2)%3;
             Tensor e1 = face->v[j1]->node->x - node->x,
                    e2 = face->v[j2]->node->x - node->x;
             node->n = node->n + cross(e1,e2)/(2*norm2(e1)*norm2(e2));//face->n;//

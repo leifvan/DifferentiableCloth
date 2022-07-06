@@ -5,7 +5,7 @@
 arcsim.egg-info
 
 
-/pysim/__pycache__
+**/__pycache__/
 
 dist/arcsim-0.0.0-py3.9-linux-x86_64.egg
 
@@ -18,3 +18,9 @@ demo/curmat.json
 
 real
 synthetic
+
+.vscode/
+
+phi_sft/logs
+logs
+dist

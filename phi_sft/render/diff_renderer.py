@@ -5,6 +5,7 @@ import pdb
 import numpy as np
 from matplotlib import cm
 from PIL import Image
+from tqdm import tqdm
 
 # Data structures and functions for rendering
 from pytorch3d.renderer import (
@@ -104,7 +105,6 @@ class DifferentiableRenderer():
         self.gauss = get_gauss_instance(args_data)
 
     def _render_rgba_vis(self, meshes, blur, novel_view): 
-        print("There are this many meshes to be rendered: ",len(meshes))
         """
 		Renders the reconstructed surfaces from input or novel view for visualisation
 		Args:
@@ -157,7 +157,7 @@ class DifferentiableRenderer():
 			images: Rendered RGBA images.
 		"""
 
-        print("There are {} meshes to render".format(len(meshes)))
+        # print("There are {} meshes to render".format(len(meshes)))
         rasterizer=MeshRasterizer(
                 cameras=self.cameras, 
                 raster_settings=self.raster_settings_soft
@@ -175,12 +175,12 @@ class DifferentiableRenderer():
         alphas = []
 
 
-        for i in range(0, len(meshes), self.n_render): 
-            print("Number of renderings: ",self.n_render) 
-            rgbs.append(soft_renderer(meshes[i:i+ self.n_render])[...,:3])
-            print("Mesh {} has been rendered".format(i))
-            alphas.append(hard_renderer(meshes[i:i+ self.n_render])[...,3][...,None])
-            print("Mesh {} has been rendered".format(i))
+        for i in tqdm(range(0, len(meshes), self.n_render), desc="render"): 
+            # print("Number of renderings: ",self.n_render) 
+            rgbs.append(soft_renderer(meshes[i:i+ self.n_render])[...,:3].cpu())
+            # print("Mesh {} has been rendered".format(i))
+            alphas.append(hard_renderer(meshes[i:i+ self.n_render])[...,3][...,None].cpu())
+            # print("Mesh {} has been rendered".format(i))
 
         rgbs = torch.cat(rgbs, dim=0)
         alphas = torch.cat(alphas, dim=0)
